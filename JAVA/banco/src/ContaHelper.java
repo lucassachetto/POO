@@ -6,6 +6,7 @@ public class ContaHelper {
     private static final String GET_CONTA_BY_USER_AND_ID = "SELECT idusuario, idconta, saldo FROM conta WHERE idUsuario = ? AND idconta = ?";
     private static final String INSERT_CONTA_CORRENTE = "INSERT INTO conta (idusuario, saldo, tipo) VALUES (?,0,?)";
     private static final String GET_CONTA_BY_USER = "SELECT idusuario, idconta, saldo FROM conta WHERE idUsuario = ? AND tipo = ?";
+    private static final String GET_CONTA_BY_USER_CPF = "SELECT idusuario, idconta, saldo FROM conta WHERE cpf = ? AND tipo = ?";
     private static final String GET_CONTA_BY_ID = "SELECT idconta, idusuario, saldo FROM conta WHERE idconta = ?";
     private static final String ATUALIZA_SALDO = "UPDATE conta SET saldo = ? WHERE idconta = ?";
 
@@ -25,7 +26,28 @@ public class ContaHelper {
         return c;
     }
 
-    public static Conta getContaByUser(Long idUsuario, String tipo) {
+    public static Conta getContaByUserCpf(String cpf, String tipo) {
+        Conta c = null;
+
+        ArrayList<Object> params = new ArrayList<Object>();
+        params.add(cpf);
+        params.add(tipo);
+        
+        ResultSet rs = Banco.get(GET_CONTA_BY_USER_CPF, params);
+       
+        try {
+            while (rs.next()) {
+               
+                c = new Conta(rs.getLong(1), rs.getLong(2), rs.getDouble(3));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return c;
+    }
+
+    public static Conta getContaByUserId(Long idUsuario, String tipo) {
         Conta c = null;
 
         ArrayList<Object> params = new ArrayList<Object>();

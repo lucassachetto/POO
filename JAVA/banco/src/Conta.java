@@ -63,6 +63,20 @@ public class Conta {
         }
     }
 
+    public void pix(String cpfDestino, double valor) {
+
+        // PIX somente conta corrente
+        Conta contaDestino = ContaHelper.getContaByUserCpf(cpfDestino, "cc");
+
+        if (isTransferable(valor)) {
+            if (!ContaHelper.transfere(this, contaDestino.idConta, valor)) {
+                System.out.println("Falha na Trânsferencia!");
+            };
+        } else {
+            System.out.println("Saldo insuficiente!");
+        }
+    }
+
     public Boolean isTransferable(Double valor) {
         return saldo >= valor;
     }

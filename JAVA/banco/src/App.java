@@ -1,25 +1,52 @@
+import java.util.Scanner;
+
 public class App {
     public static void main(String[] args) throws Exception {
         
         Banco.connectDb();
 
-        Usuario u1 = UsuarioHelper.getUsuario("Lucas", "123");
-        ContaCorrente cc = new ContaCorrente(ContaHelper.getContaByUser(u1.getId(),"cc"));
+        int op = 0;
+        Usuario currentUser = null;
+        Scanner sc = new Scanner(System.in);
 
-        cc.verSaldo();
+        while (op != -1) {
+            System.out.println("------------- MENU -------------\n");
 
-        ContaInvestimento ci = new ContaInvestimento(ContaHelper.getContaByUser(u1.getId(),"ci"));
-        ci.verSaldo();
+            //PRINTA OPCOES
+            //LOGIN 
+            if (currentUser == null) {
+                System.out.println("0. Login\n");
 
-        cc.transferir(ci.getIdConta(), 50.00);
+            } else { // LOGADO
 
-        cc.verSaldo();
-        ci.verSaldo();
+            }
+            op = sc.nextInt();
 
-        cc.deposito(900);
+            switch(op) {
+                case 0:
+                    System.out.println("Digite seu usuario e senha\n");
+                    String usuario = sc.nextLine();
+                    String senha = sc.nextLine();
+                    
+                    currentUser = UsuarioHelper.getUsuario(usuario, senha);
 
-        cc.saque(250);
+                    if (currentUser == null) {
+                        System.out.println("Usuario nao encontrado!");
+                    }
 
-        cc.verHistorico();
+                break;
+
+                case 1:
+                break;
+
+                case 2:
+
+                break;
+
+            }
+
+        }
+
+        Banco.disconnectDb();
     }
 }
