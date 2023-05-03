@@ -1,0 +1,13 @@
+{
+  "java.project.referencedLibraries": [
+    "lib/**/*.jar",
+    "/Users/Fakul/Documents/JAVAFX/lib/javafx-swt.jar",
+    "/Users/Fakul/Documents/JAVAFX/lib/javafx.base.jar",
+    "/Users/Fakul/Documents/JAVAFX/lib/javafx.controls.jar",
+    "/Users/Fakul/Documents/JAVAFX/lib/javafx.fxml.jar",
+    "/Users/Fakul/Documents/JAVAFX/lib/javafx.graphics.jar",
+    "/Users/Fakul/Documents/JAVAFX/lib/javafx.media.jar",
+    "/Users/Fakul/Documents/JAVAFX/lib/javafx.swing.jar",
+    "/Users/Fakul/Documents/JAVAFX/lib/javafx.web.jar"
+  ]
+}

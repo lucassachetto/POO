@@ -6,18 +6,11 @@ import java.time.LocalDateTime;
 public class Banco {
 
     private static Connection con;
-    
 
     public static Boolean connectDb() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/banco", "root", "Unesp2023*");
-            // Statement stmt = con.createStatement();
-            // ResultSet rs = stmt.executeQuery("SELECT * FROM usuario WHERE name = lucas AND senha = teste");
-
-            // while (rs.next()){
-            //     System.out.println(rs.getString(0));
-            // }
+            con = DriverManager.getConnection("jdbc:mysql://191.255.24.126:3306/banco", "root", "Unesp2023*");
             
             System.out.println("Conectado com BD!");
             return true;
