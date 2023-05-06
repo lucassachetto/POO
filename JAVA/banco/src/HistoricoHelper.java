@@ -7,9 +7,7 @@ public class HistoricoHelper {
     private static final String INSERT_HISTORICO = "INSERT INTO historico_operacoes (idconta,valor,descricao,datahora) VALUES (?,?,?,?)";
     private static final String GET_HISTORICO_BY_CONTA_ID = "SELECT idhistorico_operacoes,idconta,valor,descricao,datahora FROM historico_operacoes WHERE idConta = ? ORDER BY datahora DESC";
 
-    public static HistoricoOperacoes novoHistorico(Long idConta, Double valor, String descricao) {
-
-        HistoricoOperacoes h = null;
+    public static Boolean novoHistorico(Long idConta, Double valor, String descricao) {
 
         LocalDateTime dt = LocalDateTime.now();
 
@@ -21,16 +19,12 @@ public class HistoricoHelper {
      
         Long idHistorico = Banco.insere(INSERT_HISTORICO, params);
 
-        if (idHistorico != null) {
-            h = new HistoricoOperacoes(idHistorico, idConta, valor, descricao, dt);
-        }
-
-        return h;
+        return idHistorico != null;
     }
 
-    public static ArrayList<HistoricoOperacoes> getHistoricoByConta(Long idConta) {
+    public static ArrayList<HistoricoOperacao> getHistoricoByConta(Long idConta) {
 
-        ArrayList<HistoricoOperacoes> historicos = new ArrayList<HistoricoOperacoes>();
+        ArrayList<HistoricoOperacao> historicos = new ArrayList<HistoricoOperacao>();
 
         ArrayList<Object> params = new ArrayList<Object>();
         params.add(idConta);
@@ -40,7 +34,7 @@ public class HistoricoHelper {
         try {
             while (rs.next()) {
                
-                historicos.add(new HistoricoOperacoes(rs.getLong(1), rs.getLong(2), rs.getDouble(3), rs.getString(4), rs.getTimestamp(5).toLocalDateTime()));
+                historicos.add(new HistoricoOperacao(rs.getLong(1), rs.getLong(2), rs.getDouble(3), rs.getString(4), rs.getTimestamp(5).toLocalDateTime()));
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());

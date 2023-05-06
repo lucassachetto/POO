@@ -1,44 +1,64 @@
+import Util.BancoException;
+
 public class ContaCorrente extends Conta {
     
-    public ContaCorrente(Conta c) {
+    private Emprestimo emprestimoAtivo;
+
+    public ContaCorrente(Conta c) throws BancoException{
         super(c.getIdUser(), c.getIdConta(), c.getSaldo());
+
+        this.emprestimoAtivo = EmprestimoHelper.getEmprestimoAtivoByConta(c.getIdConta());
     }
 
-    public void deposito(double valor) {
+    public void deposito(double valor) throws BancoException {
 
         if (valor > 0) {
-            super.fazOperacao(valor, "DEPOSITO");
+
+            Operacao.fazOperacao(getIdConta(), valor, "DEPOSITO             ");
+            super.atualizaSaldo();
+
         } else {
-            System.out.println("Valor inválido!");
+            throw new BancoException("Valor inválido!");
         }
     }
 
-    public void saque(double valor) {
+    public void saque(double valor) throws BancoException {
 
         if (valor > 0) {
         
             if (super.isTransferable(valor)) {
-
-                super.fazOperacao(valor*-1, "SAQUE       ");
-
+                
+                Operacao.fazOperacao(getIdConta(),valor*-1, "SAQUE               ");
+                super.atualizaSaldo();
             } else {
-                System.out.println("Saldo insuficiente!");
+                throw new BancoException("Saldo insuficiente!");
             }
         }
         else {
-            System.out.println("Valor inválido!");
+            throw new BancoException("Valor inválido!");
         }
     }
 
-    public void emprestimo(Double valor) {
-        if (valor <= maxValorEmprestimo()) {
-            super.fazOperacao(valor, "EMPRESTIMO");
+    public Emprestimo getEmprestimoAtivo() {
+       return emprestimoAtivo;
+    }
+
+    public void setEmprestimoAtivo(Emprestimo emprestimoAtivo) {
+        this.emprestimoAtivo = emprestimoAtivo;
+    }
+
+    public void fazerEmprestimo(double valor) throws BancoException {
+        if (emprestimoAtivo != null) {
+            if (valor <= maxValorEmprestimo()) {
+                EmprestimoHelper.novoEmprestimo(getIdConta(), valor);
+                setEmprestimoAtivo(EmprestimoHelper.getEmprestimoAtivoByConta(getIdConta()));
+            }
         } else {
-            System.out.println("Valor pedido maior que o limite pre aprovado que e de: "+maxValorEmprestimo().toString());
+            throw new BancoException("Não é possível fazer outro emprestimo, já existe um em andamento!");
         }
     }
 
-    public Double maxValorEmprestimo() {
+    private Double maxValorEmprestimo() throws BancoException {
         Double value = this.getSaldo()*5;
         if (value == 0) {
             value = 50.00;

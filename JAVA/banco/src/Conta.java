@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import Util.BancoException;
+
 public class Conta {
     private Long idUser;
     private Long idConta;
@@ -20,46 +22,55 @@ public class Conta {
     }
 
     public double getSaldo() {
-        return saldo;
-    }
-
-    public void fazOperacao(double valor, String op) {
-
-        Double novoSaldo = this.saldo + valor;
     
-        Boolean opResult = ContaHelper.atualizaSaldo(idConta, novoSaldo);
-
-        if (opResult) {
-            HistoricoHelper.novoHistorico(idConta, valor, op);
-            
-            this.saldo = novoSaldo;
-            System.out.println("Saldo Atualizado!");
-        } else {
-            System.out.println("Erro ao atualizar saldo");
-        }
+        return this.saldo;
     }
 
-    public void verSaldo() {
-        System.out.println("Saldo: "+ saldo);
+    public void atualizaSaldo() throws BancoException {
+        this.saldo = ContaHelper.getSaldoConta(this.idConta);
     }
 
     public void verHistorico() {
 
-        ArrayList<HistoricoOperacoes> historicos = HistoricoHelper.getHistoricoByConta(idConta);
+        ArrayList<HistoricoOperacao> historicos = HistoricoHelper.getHistoricoByConta(idConta);
 
         System.out.println("-------- Historico --------\n");
-        for (HistoricoOperacoes historico : historicos) {
+        for (HistoricoOperacao historico : historicos) {
             System.out.println(historico.toString());
+        }
+        System.out.println("\n");
+    }
+
+    public void pix(String cpfDestino, Double valor) throws BancoException {
+
+        Conta contaDestino = ContaHelper.getContaByUserCpf(cpfDestino, "cc");
+        
+        if (contaDestino != null) {
+            if (isTransferable(valor)) {
+                Operacao.transferencia(this.idConta, contaDestino.getIdConta(), valor, "PIX");
+                atualizaSaldo();
+            } else {
+                throw new BancoException("Saldo insuficiente!");
+            }
+        } else {
+            throw new BancoException("Conta destino não encontrada!");
         }
     }
 
-    public void transferir(Long idContaDestino, Double valor) {
-        if (isTransferable(valor)) {
-            if (!ContaHelper.transfere(this, idContaDestino, valor)) {
-                System.out.println("Falha na Trânsferencia!");
-            };
+    //Transferencia de conta corrente para conta investimento ou vice e versa
+    public void transferenciaInterna(Long idContaDestino, Double valor) throws BancoException {
+
+        Conta contaDestino = ContaHelper.getContaById(idContaDestino);
+        
+        if (contaDestino != null && contaDestino.getIdUser() == this.idUser) {
+            if (isTransferable(valor)) {
+                Operacao.transferencia(this.idConta, idContaDestino, valor, "TRANSFERENCIA INTERNA");
+                atualizaSaldo();
+            } else {
+                throw new BancoException("Saldo insuficiente!");
+            }
         } else {
-            System.out.println("Saldo insuficiente!");
+            throw new BancoException("Conta destino não encontrada!");
         }
     }
 

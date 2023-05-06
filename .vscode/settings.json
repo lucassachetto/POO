@@ -8,6 +8,15 @@
     "/Users/Fakul/Documents/JAVAFX/lib/javafx.graphics.jar",
     "/Users/Fakul/Documents/JAVAFX/lib/javafx.media.jar",
     "/Users/Fakul/Documents/JAVAFX/lib/javafx.swing.jar",
-    "/Users/Fakul/Documents/JAVAFX/lib/javafx.web.jar"
+    "/Users/Fakul/Documents/JAVAFX/lib/javafx.web.jar",
+    "JAVA/banco/lib/javafx.base.jar",
+    "JAVA/banco/lib/javafx.controls.jar",
+    "JAVA/banco/lib/javafx.fxml.jar",
+    "JAVA/banco/lib/javafx.graphics.jar",
+    "JAVA/banco/lib/javafx.media.jar",
+    "JAVA/banco/lib/javafx.swing.jar",
+    "JAVA/banco/lib/javafx.web.jar",
+    "JAVA/banco/lib/javafx-swt.jar",
+    "JAVA/banco/lib/mysql-connector-j-8.0.33.jar"
   ]
 }

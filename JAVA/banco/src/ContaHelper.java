@@ -1,32 +1,40 @@
+
 import java.util.ArrayList;
+import Util.BancoException;
+
 import java.sql.ResultSet;
 
 public class ContaHelper {
 
-    private static final String GET_CONTA_BY_USER_AND_ID = "SELECT idusuario, idconta, saldo FROM conta WHERE idUsuario = ? AND idconta = ?";
-    private static final String INSERT_CONTA_CORRENTE = "INSERT INTO conta (idusuario, saldo, tipo) VALUES (?,0,?)";
-    private static final String GET_CONTA_BY_USER = "SELECT idusuario, idconta, saldo FROM conta WHERE idUsuario = ? AND tipo = ?";
-    private static final String GET_CONTA_BY_USER_CPF = "SELECT idusuario, idconta, saldo FROM conta WHERE cpf = ? AND tipo = ?";
-    private static final String GET_CONTA_BY_ID = "SELECT idconta, idusuario, saldo FROM conta WHERE idconta = ?";
-    private static final String ATUALIZA_SALDO = "UPDATE conta SET saldo = ? WHERE idconta = ?";
+    private static final String INSERT_CONTA = "INSERT INTO conta (idusuario, tipo) VALUES (?,?)";
+    private static final String GET_CONTA_BY_USER = "SELECT idusuario, idconta,(SELECT sum(valor) FROM banco.historico_operacoes WHERE idconta = c.idconta),tipo FROM conta c WHERE idUsuario = ? AND tipo = ?";
+    private static final String GET_CONTA_BY_USER_CPF = "SELECT c.idusuario, c.idconta FROM conta c INNER JOIN usuario u ON c.idusuario = u.idusuario WHERE u.cpf = ? AND c.tipo = ?";
+    private static final String GET_CONTA_BY_ID = "SELECT idusuario, idconta,(SELECT sum(valor) FROM banco.historico_operacoes WHERE idconta = c.idconta),tipo FROM conta c WHERE idconta = ?";
+    private static final String GET_CONTA_SALDO = "SELECT sum(valor) FROM banco.historico_operacoes WHERE idconta = ?";
 
-    public static Conta novaConta(Long idUsuario, String tipo) {
+    public static Conta novaConta(Long idUsuario, String tipo) throws BancoException {
         Conta c = null;
 
         ArrayList<Object> params = new ArrayList<Object>();
         params.add(idUsuario);
         params.add(tipo);
-     
-        Long idContaCorrente = Banco.insere(INSERT_CONTA_CORRENTE, params);
 
-        if (idContaCorrente != null) {
-            c = new Conta(idUsuario, idContaCorrente, 0.00);
+        Long idConta = null;
+        
+        try {
+            idConta = Banco.insere(INSERT_CONTA, params);
+        } catch (Exception e) {
+            throw new BancoException(e.getMessage());
+        }
+        
+        if (idConta != null) {
+            c = new Conta(idUsuario, idConta, 0.00);
         }
 
         return c;
     }
 
-    public static Conta getContaByUserCpf(String cpf, String tipo) {
+    public static Conta getContaByUserCpf(String cpf, String tipo) throws BancoException {
         Conta c = null;
 
         ArrayList<Object> params = new ArrayList<Object>();
@@ -38,16 +46,16 @@ public class ContaHelper {
         try {
             while (rs.next()) {
                
-                c = new Conta(rs.getLong(1), rs.getLong(2), rs.getDouble(3));
+                c = new Conta(rs.getLong(1), rs.getLong(2),0.00);
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            throw new BancoException(e.getMessage());
         }
 
         return c;
     }
 
-    public static Conta getContaByUserId(Long idUsuario, String tipo) {
+    public static Conta getContaByUserId(Long idUsuario, String tipo) throws BancoException {
         Conta c = null;
 
         ArrayList<Object> params = new ArrayList<Object>();
@@ -62,13 +70,13 @@ public class ContaHelper {
                 c = new Conta(rs.getLong(1), rs.getLong(2), rs.getDouble(3));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            throw new BancoException(e.getMessage());
         }
 
         return c;
     }
 
-    public static Conta getContaById(Long idConta) {
+    public static Conta getContaById(Long idConta) throws BancoException {
         Conta c = null;
 
         ArrayList<Object> params = new ArrayList<Object>();
@@ -82,58 +90,29 @@ public class ContaHelper {
                 c = new Conta(rs.getLong(1), rs.getLong(2), rs.getDouble(3));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            
+            throw new BancoException(e.getMessage());
         }
 
         return c;
     }
 
-    public static Boolean atualizaSaldo(Long idConta, Double novoSaldo) {
-
+    public static Double getSaldoConta (Long idConta) throws BancoException {
+        Double saldo = 0.00;
         ArrayList<Object> params = new ArrayList<Object>();
-        params.add(novoSaldo);
         params.add(idConta);
-
-        return Banco.atualiza(ATUALIZA_SALDO, params);
-    }
-
-    public static Boolean transfere(Conta conta, Long idContaDestino, Double valor) {
         
-        Boolean isSuccess = false;
-
-        // Checa se a conta é do mesmo dono
-        ArrayList<Object> params = new ArrayList<Object>();
-        params.add(conta.getIdUser());
-        params.add(idContaDestino);
-
-        ResultSet rs = Banco.get(GET_CONTA_BY_USER_AND_ID, params);
-
-        Conta contaDestino = null;
-
+        ResultSet rs = Banco.get(GET_CONTA_SALDO, params);
+       
         try {
             while (rs.next()) {
                
-                contaDestino = new Conta(rs.getLong(1), rs.getLong(2), rs.getDouble(3));
+                saldo = rs.getDouble(1);
             }
-
-            if (contaDestino != null) {
-            
-                //Entra conta Destino
-                contaDestino.fazOperacao(valor, "TRANSFERENCIA");
-    
-                // Sai conta atual
-                conta.fazOperacao(valor*-1, "TRANSFERENCIA");
-
-                isSuccess = true;
-            } else {
-                isSuccess = false;
-            }
-
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            isSuccess = false;
+            throw new BancoException("Não foi possível encontrar o saldo da conta!");
         }
 
-        return isSuccess;
+        return saldo;
     }
 }
