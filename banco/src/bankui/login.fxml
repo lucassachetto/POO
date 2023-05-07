@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+
+<SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bankui.LoginController">
+  <items>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #15b33f; -fx-border-color: #15b33f;">
+         <children>
+            <Label alignment="CENTER" layoutX="86.0" layoutY="175.0" text="Banco" textFill="WHITE">
+               <font>
+                  <Font name="Futura Md BT Bold" size="40.0" />
+               </font>
+            </Label>
+         </children></AnchorPane>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: white; -fx-border-color: white;">
+         <children>
+            <Label layoutX="26.0" layoutY="93.0" text="Entrar">
+               <font>
+                  <Font name="Futura Md BT Bold" size="18.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnCriarConta" layoutX="26.0" layoutY="275.0" mnemonicParsing="false" onAction="#switchSignUp" prefHeight="25.0" prefWidth="240.0" text="Criar Conta" />
+            <Button fx:id="btnEntrar" layoutX="26.0" layoutY="234.0" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="240.0" text="Entrar" />
+            <TextField fx:id="tfLoginEmail" layoutX="26.0" layoutY="141.0" prefHeight="25.0" prefWidth="240.0" promptText="Nome">
+               <font>
+                  <Font name="Futura Md BT Bold" size="12.0" />
+               </font>
+            </TextField>
+            <PasswordField fx:id="pfLoginSenha" layoutX="26.0" layoutY="186.0" prefHeight="25.0" prefWidth="240.0" promptText="Senha">
+               <font>
+                  <Font name="Futura Md BT Bold" size="12.0" />
+               </font>
+            </PasswordField>
+         </children></AnchorPane>
+  </items>
+</SplitPane>
