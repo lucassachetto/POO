@@ -6,7 +6,7 @@
       "name": "Launch App",
       "request": "launch",
       "mainClass": "bankui.App",
-      "vmArgs": "--module-path ${workspaceFolder}/JAVA/banco/lib --add-modules javafx.controls,javafx.fxml"
+      "vmArgs": "--module-path ${workspaceFolder}/banco/lib --add-modules javafx.controls,javafx.fxml"
     },
     {
       "type": "java",
