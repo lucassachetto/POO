@@ -1,3 +1,4 @@
+package main;
 import java.util.ArrayList;
 
 import Util.BancoException;
@@ -6,11 +7,31 @@ public class Conta {
     private Long idUser;
     private Long idConta;
     private double saldo;
+    private String tipo;
 
-    public Conta(Long idUsuario, Long idConta, Double saldo) {
+    public Conta(Long idUsuario, Long idConta, Double saldo, String tipo) {
         this.idUser = idUsuario;
         this.idConta = idConta;
         this.saldo = saldo;
+        this.tipo = tipo;
+    }
+
+    public String getTipo() {
+        String tipoF = "";
+        switch (this.tipo) {
+            case "cc":
+                tipoF = "Conta Corrente";
+            break;
+
+            case "ci":
+                tipoF = "Conta Investimento";
+            break;
+
+            default:
+
+            break;
+        }
+        return tipoF;
     }
 
     public Long getIdConta() {

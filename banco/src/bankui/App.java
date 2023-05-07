@@ -1,16 +1,30 @@
 package bankui;
 
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import java.io.IOException;
+
+import Util.BancoException;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import main.Usuario;
 
 public class App extends Application {
 
     private static Scene scene;
     private static Stage stage;
+
+    private static Usuario user;
+
+    public static void setUser(Usuario user) {
+        App.user = user;
+    }
+
+    public static Usuario getUser() {
+        return user;
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception{

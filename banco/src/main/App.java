@@ -1,3 +1,4 @@
+package main;
 public class App {
     public static void main(String[] args) throws Exception {
         
@@ -5,10 +6,10 @@ public class App {
 
         Usuario u1 = UsuarioHelper.getUsuario("Lucas", "123");
         Usuario u2 = UsuarioHelper.getUsuario("teste","456");
-        ContaCorrente cc2 = new ContaCorrente(ContaHelper.getContaByUserId(u2.getId(), "cc"));
-        ContaCorrente cc = new ContaCorrente(ContaHelper.getContaByUserId(u1.getId(), "cc"));
+        ContaCorrente cc2 = new ContaCorrente(ContaHelper.getContaByUserIdTipo(u2.getId(), "cc"));
+        ContaCorrente cc = new ContaCorrente(ContaHelper.getContaByUserIdTipo(u1.getId(), "cc"));
 
-        ContaInvestimento ci = new ContaInvestimento(ContaHelper.getContaByUserId(u1.getId(), "ci"));
+        ContaInvestimento ci = new ContaInvestimento(ContaHelper.getContaByUserIdTipo(u1.getId(), "ci"));
         
         //cc.pix("555469", 200.00);
         

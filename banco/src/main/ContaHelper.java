@@ -1,3 +1,4 @@
+package main;
 
 import java.util.ArrayList;
 import Util.BancoException;
@@ -7,7 +8,8 @@ import java.sql.ResultSet;
 public class ContaHelper {
 
     private static final String INSERT_CONTA = "INSERT INTO conta (idusuario, tipo) VALUES (?,?)";
-    private static final String GET_CONTA_BY_USER = "SELECT idusuario, idconta,(SELECT sum(valor) FROM banco.historico_operacoes WHERE idconta = c.idconta),tipo FROM conta c WHERE idUsuario = ? AND tipo = ?";
+    private static final String GET_CONTA_BY_USER_TIPO = "SELECT idusuario, idconta,(SELECT sum(valor) FROM banco.historico_operacoes WHERE idconta = c.idconta),tipo FROM conta c WHERE idUsuario = ? AND tipo = ?";
+    private static final String GET_CONTA_BY_USER = "SELECT idusuario, idconta,(SELECT sum(valor) FROM banco.historico_operacoes WHERE idconta = c.idconta),tipo FROM conta c WHERE idUsuario = ?";
     private static final String GET_CONTA_BY_USER_CPF = "SELECT c.idusuario, c.idconta FROM conta c INNER JOIN usuario u ON c.idusuario = u.idusuario WHERE u.cpf = ? AND c.tipo = ?";
     private static final String GET_CONTA_BY_ID = "SELECT idusuario, idconta,(SELECT sum(valor) FROM banco.historico_operacoes WHERE idconta = c.idconta),tipo FROM conta c WHERE idconta = ?";
     private static final String GET_CONTA_SALDO = "SELECT sum(valor) FROM banco.historico_operacoes WHERE idconta = ?";
@@ -28,7 +30,7 @@ public class ContaHelper {
         }
         
         if (idConta != null) {
-            c = new Conta(idUsuario, idConta, 0.00);
+            c = new Conta(idUsuario, idConta, 0.00, tipo);
         }
 
         return c;
@@ -46,7 +48,7 @@ public class ContaHelper {
         try {
             while (rs.next()) {
                
-                c = new Conta(rs.getLong(1), rs.getLong(2),0.00);
+                c = new Conta(rs.getLong(1), rs.getLong(2),0.00,null );
             }
         } catch (Exception e) {
             throw new BancoException(e.getMessage());
@@ -55,25 +57,44 @@ public class ContaHelper {
         return c;
     }
 
-    public static Conta getContaByUserId(Long idUsuario, String tipo) throws BancoException {
+    public static Conta getContaByUserIdTipo(Long idUsuario, String tipo) throws BancoException {
         Conta c = null;
 
         ArrayList<Object> params = new ArrayList<Object>();
         params.add(idUsuario);
         params.add(tipo);
         
-        ResultSet rs = Banco.get(GET_CONTA_BY_USER, params);
+        ResultSet rs = Banco.get(GET_CONTA_BY_USER_TIPO, params);
        
         try {
             while (rs.next()) {
                
-                c = new Conta(rs.getLong(1), rs.getLong(2), rs.getDouble(3));
+                c = new Conta(rs.getLong(1), rs.getLong(2), rs.getDouble(3), rs.getString(4));
             }
         } catch (Exception e) {
             throw new BancoException(e.getMessage());
         }
 
         return c;
+    }
+
+    public static ArrayList<Conta> getContaByUserId(Long idUsuario) throws BancoException {
+        ArrayList<Conta> contas = new ArrayList<Conta>();
+
+        ArrayList<Object> params = new ArrayList<Object>();
+        params.add(idUsuario);
+        
+        ResultSet rs = Banco.get(GET_CONTA_BY_USER, params);
+       
+        try {
+            while (rs.next()) {
+                contas.add(new Conta(rs.getLong(1), rs.getLong(2), rs.getDouble(3), rs.getString(4)));
+            }
+        } catch (Exception e) {
+            throw new BancoException(e.getMessage());
+        }
+
+        return contas;
     }
 
     public static Conta getContaById(Long idConta) throws BancoException {
@@ -87,7 +108,7 @@ public class ContaHelper {
         try {
             while (rs.next()) {
                
-                c = new Conta(rs.getLong(1), rs.getLong(2), rs.getDouble(3));
+                c = new Conta(rs.getLong(1), rs.getLong(2), rs.getDouble(3), rs.getString(4));
             }
         } catch (Exception e) {
             

@@ -1,10 +1,23 @@
 package bankui;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
+import main.UsuarioHelper;
+import main.Usuario;
+
 import java.io.IOException;
+
+import Util.AlertBanco;
+import Util.BancoException;
 
 public class LoginController {
 
+    @FXML private TextField tfLoginEmail;
+    @FXML private PasswordField pfLoginSenha;
+    
     public void initialize() {
 
     }
@@ -16,7 +29,24 @@ public class LoginController {
     }
 
     @FXML
+    public static void switchSelectConta() throws IOException, BancoException {
+        App.setRoot("selectconta");
+        App.setTitle("Banco - Selecionar Conta");
+    }
+
+    @FXML
     private void login() throws IOException {
+        
         // Login
+        try {
+
+            App.setUser(UsuarioHelper.getUsuario(tfLoginEmail.getText(), pfLoginSenha.getText()));
+            switchSelectConta();
+            
+        } catch (Exception e) {
+
+            new AlertBanco("Falha de autenticação", e.getMessage(), Alert.AlertType.ERROR);
+        }
+       
     }
 }

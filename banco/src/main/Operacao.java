@@ -1,3 +1,4 @@
+package main;
 import Util.BancoException;
 
 public class Operacao {

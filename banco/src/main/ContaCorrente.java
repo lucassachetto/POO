@@ -1,3 +1,4 @@
+package main;
 import Util.BancoException;
 
 public class ContaCorrente extends Conta {
@@ -5,7 +6,7 @@ public class ContaCorrente extends Conta {
     private Emprestimo emprestimoAtivo;
 
     public ContaCorrente(Conta c) throws BancoException{
-        super(c.getIdUser(), c.getIdConta(), c.getSaldo());
+        super(c.getIdUser(), c.getIdConta(), c.getSaldo(),"cc");
 
         this.emprestimoAtivo = EmprestimoHelper.getEmprestimoAtivoByConta(c.getIdConta());
     }

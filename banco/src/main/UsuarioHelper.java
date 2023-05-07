@@ -1,5 +1,8 @@
+package main;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+
+import Util.BancoException;
 
 public class UsuarioHelper {
 
@@ -23,7 +26,7 @@ public class UsuarioHelper {
         return u;
     }
 
-    public static Usuario getUsuario(String nome, String senha) {
+    public static Usuario getUsuario(String nome, String senha) throws BancoException {
         Usuario u = null;
 
         ArrayList<Object> params = new ArrayList<Object>();
@@ -39,6 +42,10 @@ public class UsuarioHelper {
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+
+        if (u == null) {
+            throw new BancoException("Usuário ou senha incorretos!");
         }
 
         return u;
