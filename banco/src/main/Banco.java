@@ -11,7 +11,7 @@ public class Banco {
     public static Boolean connectDb() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://191.255.24.126:3306/banco", "root", "Unesp2023*");
+            con = DriverManager.getConnection("jdbc:mysql://200.148.39.206:3306/banco", "root", "Unesp2023*");
             
             System.out.println("Conectado com BD!");
             return true;
