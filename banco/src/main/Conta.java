@@ -51,15 +51,18 @@ public class Conta {
         this.saldo = ContaHelper.getSaldoConta(this.idConta);
     }
 
-    public void verHistorico() {
+    public String verHistorico() {
 
         ArrayList<HistoricoOperacao> historicos = HistoricoHelper.getHistoricoByConta(idConta);
 
-        System.out.println("-------- Historico --------\n");
+        String historicoStr = "";
+       
         for (HistoricoOperacao historico : historicos) {
-            System.out.println(historico.toString());
+            historicoStr = historicoStr + historico.toString()+"\n";
+    
         }
-        System.out.println("\n");
+
+        return historicoStr;
     }
 
     public void pix(String cpfDestino, Double valor) throws BancoException {

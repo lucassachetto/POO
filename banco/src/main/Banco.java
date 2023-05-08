@@ -56,7 +56,6 @@ public class Banco {
 
         } catch (Exception e) {
             System.out.println("Erro ao inserir registro: "+e.getMessage());
-            // TODO: handle exception
         }
 
         return insertedId;

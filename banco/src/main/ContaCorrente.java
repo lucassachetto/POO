@@ -1,14 +1,24 @@
 package main;
+import java.rmi.NoSuchObjectException;
+import java.util.ArrayList;
+import java.util.Objects;
+
 import Util.BancoException;
 
 public class ContaCorrente extends Conta {
     
     private Emprestimo emprestimoAtivo;
+    private ArrayList<Emprestimo> emprestimos;
 
     public ContaCorrente(Conta c) throws BancoException{
         super(c.getIdUser(), c.getIdConta(), c.getSaldo(),"cc");
 
         this.emprestimoAtivo = EmprestimoHelper.getEmprestimoAtivoByConta(c.getIdConta());
+        this.emprestimos = EmprestimoHelper.getEmprestimosByConta(c.getIdConta());
+    }
+
+    public ArrayList<Emprestimo> getEmprestimos() {
+        return emprestimos;
     }
 
     public void deposito(double valor) throws BancoException {
@@ -49,17 +59,36 @@ public class ContaCorrente extends Conta {
     }
 
     public void fazerEmprestimo(double valor) throws BancoException {
-        if (emprestimoAtivo != null) {
+
+        if (Objects.isNull(emprestimoAtivo)) {
             if (valor <= maxValorEmprestimo()) {
                 EmprestimoHelper.novoEmprestimo(getIdConta(), valor);
+                Operacao.fazOperacao(getIdConta(), valor, "EMPRESTIMO");
                 setEmprestimoAtivo(EmprestimoHelper.getEmprestimoAtivoByConta(getIdConta()));
+            } else {
+                throw new BancoException("Valor pedido maior que o disponivel!");
             }
         } else {
             throw new BancoException("Não é possível fazer outro emprestimo, já existe um em andamento!");
         }
     }
 
-    private Double maxValorEmprestimo() throws BancoException {
+    public void pagarEmprestimo(double valor) throws BancoException {
+
+        if (Objects.nonNull(emprestimoAtivo)) {
+            if (valor <= getSaldo()) {
+                
+                    emprestimoAtivo.pagar(valor);
+                    setEmprestimoAtivo(EmprestimoHelper.getEmprestimoAtivoByConta(getIdConta()));
+                } else {
+                    throw new BancoException("Saldo insuficiente!");
+                }
+        } else {
+            throw new BancoException("Não existe emprestimo em andamento!");
+        }
+    }
+
+    public Double maxValorEmprestimo() throws BancoException {
         Double value = this.getSaldo()*5;
         if (value == 0) {
             value = 50.00;

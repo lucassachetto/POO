@@ -1,22 +1,30 @@
 package bankui;
 
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import java.io.IOException;
 
-import Util.BancoException;
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import main.Conta;
 import main.Usuario;
 
 public class App extends Application {
 
     private static Scene scene;
     private static Stage stage;
-
+    private static Conta contaSelecionada;
     private static Usuario user;
+
+    public static Conta getContaSelecionada() {
+        return contaSelecionada;
+    }   
+
+    public static void setContaSelecionada(Conta contaSelecionada) {
+        App.contaSelecionada = contaSelecionada;
+    }
 
     public static void setUser(Usuario user) {
         App.user = user;

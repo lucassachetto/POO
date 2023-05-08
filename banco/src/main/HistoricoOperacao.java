@@ -27,7 +27,7 @@ public class HistoricoOperacao {
     @Override
     public String toString() {
             
-        String msg = "\t"+descricao+"\t";
+        String msg = descricao+"\t";
 
         msg = msg + valor.toString() + "\t" + datahora.toString();
     

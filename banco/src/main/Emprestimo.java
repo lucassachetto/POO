@@ -17,6 +17,14 @@ public class Emprestimo {
         this.valorPago = valorPago;
     }
 
+    public Long getIdEmprestimo() {
+        return idEmprestimo;
+    }
+
+    public Long getIdConta() {
+        return idConta;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -31,7 +39,15 @@ public class Emprestimo {
 
     public void pagar(double valor) throws BancoException {
         if (valor <= getValorRestante()) {
-            EmprestimoHelper.pagarEmprestimo(this.idEmprestimo, valor+getValorPago());
+
+                String novoStatus = "ATIVO";
+                if (getValorEmprestado() == getValorPago() + valor) {
+                    novoStatus = "PAGO";
+                }
+            EmprestimoHelper.pagarEmprestimo(this.idEmprestimo, valor+getValorPago(), novoStatus);
+            Operacao.fazOperacao(getIdConta(), valor*-1, "PG EMPRESTIMO");
+        } else {
+            throw new BancoException("Valor a ser pago maior que o restante!");
         }
     }
 
