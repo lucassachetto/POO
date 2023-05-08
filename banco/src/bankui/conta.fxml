@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+
+<SplitPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bankui.ContaController">
+  <items>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="484.0" prefWidth="598.0" style="-fx-background-color: white; -fx-border-color: white;">
+         <children>
+            <Pane layoutX="3.0" layoutY="1.0" prefHeight="63.0" prefWidth="598.0" style="-fx-background-color: #15b33f;">
+               <children>
+                  <Label layoutX="14.0" layoutY="19.0" text="Conta:">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="idConta" layoutX="67.0" layoutY="23.0" prefHeight="17.0" prefWidth="28.0" />
+                  <Label layoutX="110.0" layoutY="19.0" text="Saldo:">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblSaldo" layoutX="161.0" layoutY="23.0" prefHeight="17.0" prefWidth="53.0" />
+                  <Button fx:id="sair" layoutX="523.0" layoutY="19.0" mnemonicParsing="false" onAction="#sair" text="Sair" />
+               </children>
+            </Pane>
+            <Label layoutX="14.0" layoutY="68.0" text="Valor" />
+            <TextField fx:id="valor" layoutX="14.0" layoutY="94.0" />
+            <Button fx:id="btndeposito" layoutX="186.0" layoutY="94.0" mnemonicParsing="false" onAction="#depositar" text="Depositar" />
+            <Button fx:id="btnsaque" layoutX="279.0" layoutY="94.0" mnemonicParsing="false" onAction="#sacar" text="Sacar" />
+            <Label layoutX="14.0" layoutY="149.0" text="CPF" />
+            <TextField fx:id="cpf" layoutX="14.0" layoutY="174.0" />
+            <Button fx:id="btnpix" layoutX="194.0" layoutY="174.0" mnemonicParsing="false" onAction="#pix" text="PIX" />
+            <Label layoutX="21.0" layoutY="221.0" text="Id Conta" />
+            <TextField fx:id="idcontadestino" layoutX="14.0" layoutY="245.0" />
+            <Button fx:id="btntransf" layoutX="185.0" layoutY="245.0" mnemonicParsing="false" onAction="#transferir" text="Transferir" />
+            <Label layoutX="334.0" layoutY="161.0" text="Emprestimo pre aprovado:" />
+            <Label fx:id="lblmaxemp" layoutX="482.0" layoutY="161.0" text="Label" />
+            <TextField fx:id="valoremp" layoutX="298.0" layoutY="187.0" prefHeight="25.0" prefWidth="141.0" />
+            <Button fx:id="btnemprestimo" layoutX="447.0" layoutY="187.0" mnemonicParsing="false" onAction="#emprestar" text="Emprestar" />
+            <Label layoutX="21.0" layoutY="301.0" text="Historico de Transações" />
+            <TextArea fx:id="historicot" layoutX="25.0" layoutY="328.0" prefHeight="121.0" prefWidth="558.0" />
+            <ScrollPane layoutX="297.0" layoutY="224.0" prefHeight="98.0" prefWidth="284.0">
+               <content>
+                  <GridPane fx:id="gridemprestimos" prefHeight="90.0" prefWidth="281.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label fx:id="lblStatus" prefHeight="22.0" prefWidth="97.0" style="-fx-background-color: #a9a9a9;" text="Status" />
+                        <Label fx:id="lblEmprestado" prefHeight="22.0" prefWidth="99.0" style="-fx-background-color: #a9a9a9;" text="Emprestado" GridPane.columnIndex="1" />
+                        <Label fx:id="lblPago" prefHeight="22.0" prefWidth="94.0" style="-fx-background-color: #a9a9a9;" text="Pago" GridPane.columnIndex="2" />
+                     </children>
+                  </GridPane>
+               </content>
+            </ScrollPane>
+            <Button fx:id="btnpagaremprestimo" layoutX="531.0" layoutY="187.0" mnemonicParsing="false" onAction="#pagarEmprestimo" text="Pagar" />
+         </children></AnchorPane>
+  </items>
+</SplitPane>
